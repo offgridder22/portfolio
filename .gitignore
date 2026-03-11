@@ -1,0 +1,9 @@
+node_modules
+.next
+out
+.windsurf
+.agents
+skills-lock.json
+.claude/skills/.mcp.json
+.env
+.env.local
