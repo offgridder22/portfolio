@@ -51,38 +51,46 @@ export default function Home() {
     if (withSound) playSceneSound(name);
   }, []);
 
-  // Scroll tracking
+  // Scroll tracking (throttled with rAF)
   useEffect(() => {
+    // Cache DOM elements once
+    const sectionEls = sectionIds.map(id => document.getElementById(id));
+    const heroEl = document.getElementById('s-hero');
+    const parallaxBg = document.querySelectorAll('.hero-parallax-bg');
+    const parallaxMid = document.querySelectorAll('.hero-parallax-mid');
+    const parallaxFg = document.querySelectorAll('.hero-parallax-fg');
+
+    let ticking = false;
+
     function onScroll() {
-      const scrollY = window.scrollY;
-      const windowH = window.innerHeight;
-      let active = 0;
-      sectionIds.forEach((id, i) => {
-        const el = document.getElementById(id);
-        if (el && scrollY >= el.offsetTop - windowH * 0.4) active = i;
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+        const windowH = window.innerHeight;
+        let active = 0;
+        sectionEls.forEach((el, i) => {
+          if (el && scrollY >= el.offsetTop - windowH * 0.4) active = i;
+        });
+        setActiveSection(active);
+
+        const targetScene = (userChosenScene && (active === 1 || active === 2))
+          ? userChosenScene
+          : sectionScenes[active];
+        changeScene(targetScene, soundOn);
+
+        // Parallax (only in hero)
+        if (heroEl && scrollY <= heroEl.offsetHeight) {
+          const bgY = `translateY(${scrollY * 0.12}px)`;
+          const midY = `translateY(${scrollY * 0.22}px)`;
+          const fgY = `translateY(${scrollY * 0.32}px)`;
+          parallaxBg.forEach(el => { el.style.transform = bgY; });
+          parallaxMid.forEach(el => { el.style.transform = midY; });
+          parallaxFg.forEach(el => { el.style.transform = fgY; });
+        }
+
+        ticking = false;
       });
-      setActiveSection(active);
-
-      const targetScene = (userChosenScene && (active === 1 || active === 2))
-        ? userChosenScene
-        : sectionScenes[active];
-      changeScene(targetScene, soundOn);
-
-      // Parallax
-      const hero = document.getElementById('s-hero');
-      if (hero && scrollY <= hero.offsetHeight) {
-        document.querySelectorAll('.hero-parallax-bg').forEach(el => {
-          el.style.transform = `translateY(${scrollY * 0.12}px)`;
-        });
-        document.querySelectorAll('.hero-parallax-mid').forEach(el => {
-          el.style.transform = `translateY(${scrollY * 0.22}px)`;
-        });
-        document.querySelectorAll('.hero-parallax-fg').forEach(el => {
-          el.style.transform = `translateY(${scrollY * 0.32}px)`;
-        });
-        const plant = document.querySelector('.flower-scene');
-        if (plant) plant.style.transform = `translateY(${scrollY * 0.08}px)`;
-      }
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });

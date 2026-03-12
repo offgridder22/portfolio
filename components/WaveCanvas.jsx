@@ -6,6 +6,8 @@ const WAVE_COUNT = 9;
 const WAVE_SPEED = 0.38;
 const MAX_RADIUS_FACTOR = 0.72;
 const LINE_WIDTH_BASE = 1.1;
+const TARGET_FPS = 30;
+const FRAME_INTERVAL = 1000 / TARGET_FPS;
 
 function getWaveColor(scene, alpha) {
   const palettes = {
@@ -22,6 +24,8 @@ export default function WaveCanvas({ scene }) {
   const wavesRef = useRef([]);
   const rafRef = useRef(0);
   const sceneRef = useRef(scene);
+  const visibleRef = useRef(false);
+  const lastFrameRef = useRef(0);
   sceneRef.current = scene;
 
   useEffect(() => {
@@ -43,7 +47,14 @@ export default function WaveCanvas({ scene }) {
       }
     }
 
-    function draw() {
+    function draw(timestamp) {
+      rafRef.current = requestAnimationFrame(draw);
+
+      // Skip if not visible or too soon (throttle to 30fps)
+      if (!visibleRef.current) return;
+      if (timestamp - lastFrameRef.current < FRAME_INTERVAL) return;
+      lastFrameRef.current = timestamp;
+
       if (!canvas || !ctx) return;
       const W = canvas.width, H = canvas.height;
       const cx = W / 2, cy = H / 2;
@@ -64,17 +75,24 @@ export default function WaveCanvas({ scene }) {
         ctx.lineWidth = lw;
         ctx.stroke();
       });
-      rafRef.current = requestAnimationFrame(draw);
     }
 
+    // IntersectionObserver — only animate when visible
+    const obs = new IntersectionObserver(
+      ([entry]) => { visibleRef.current = entry.isIntersecting; },
+      { rootMargin: '50px' }
+    );
+    obs.observe(canvas);
+
     initWaves();
-    draw();
+    rafRef.current = requestAnimationFrame(draw);
 
     const handleResize = () => initWaves();
     window.addEventListener('resize', handleResize);
     return () => {
       cancelAnimationFrame(rafRef.current);
       window.removeEventListener('resize', handleResize);
+      obs.disconnect();
     };
   }, []);
 
