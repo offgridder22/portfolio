@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import SplineScene from './SplineScene';
+import WaveCanvas from './WaveCanvas';
 import { sceneThemes } from './SceneThemes';
 
 export default function BreatheSection({ scene, onToggleFullscreen, isFullscreen }) {
@@ -25,6 +25,7 @@ export default function BreatheSection({ scene, onToggleFullscreen, isFullscreen
   useEffect(() => {
     const t = sceneThemes[scene];
     phasesRef.current = t.phases;
+    // Fade label and guide
     setLabel(t.label);
     setGuide(t.guide);
     if (!breathingRef.current) {
@@ -94,11 +95,7 @@ export default function BreatheSection({ scene, onToggleFullscreen, isFullscreen
 
   return (
     <section id="s-breathe">
-      {/* 3D Spline background */}
-      <div className="spline-breathe-bg" aria-hidden="true">
-        <SplineScene />
-      </div>
-
+      <WaveCanvas scene={scene} />
       <button
         className="fullscreen-btn"
         onClick={onToggleFullscreen}

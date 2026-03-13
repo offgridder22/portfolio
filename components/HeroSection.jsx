@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 export default function HeroSection({ onBegin }) {
   return (
     <section id="s-hero">
@@ -19,6 +21,9 @@ export default function HeroSection({ onBegin }) {
       <div className="scroll-hint">
         <div className="scroll-line"></div>
         <span className="scroll-label">scroll</span>
+      </div>
+      <div className="flower-scene" aria-hidden="true">
+        <Image className="flower-gif" src="/images/plant.png" alt="" width={600} height={600} priority />
       </div>
     </section>
   );
