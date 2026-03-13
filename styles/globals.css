@@ -132,10 +132,28 @@ nav {
 
 /* ── HERO ── */
 #s-hero {
-  text-align: center;
   gap: 0;
   overflow: hidden;
-  padding-bottom: 0;
+  padding: 0;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.hero-layout {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+}
+
+.hero-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 40px 8px;
 }
 
 .hero-eyebrow {
@@ -152,7 +170,7 @@ nav {
 
 .hero-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(4.5rem, 10vw, 8rem);
+  font-size: clamp(3.5rem, 6vw, 6.5rem);
   font-weight: 300;
   line-height: 0.9;
   letter-spacing: -0.02em;
@@ -160,7 +178,7 @@ nav {
   opacity: 0;
   transform: translateY(24px);
   animation: fadeUp 1.4s 0.6s forwards;
-  margin-bottom: 40px;
+  margin-bottom: 36px;
 }
 
 .hero-title em {
@@ -174,8 +192,8 @@ nav {
   color: var(--text-mid);
   letter-spacing: 0.06em;
   line-height: 1.8;
-  max-width: 340px;
-  margin: 0 auto 56px;
+  max-width: 320px;
+  margin: 0 auto 48px;
   opacity: 0;
   animation: fadeUp 1.2s 0.9s forwards;
 }
@@ -238,30 +256,34 @@ nav {
   color: var(--text-light);
 }
 
-/* ── PLANT IMAGE ── */
+/* ── SPLINE SCENES ── */
 .flower-scene {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 40%;
-  height: 50%;
-  pointer-events: none;
-  z-index: 3;
+  flex: 0 0 37%;
+  align-self: stretch;
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 50%, rgba(0,0,0,0.6) 72%, rgba(0,0,0,0.15) 88%, transparent 100%);
-  mask-image: linear-gradient(to bottom, black 0%, black 50%, rgba(0,0,0,0.6) 72%, rgba(0,0,0,0.15) 88%, transparent 100%);
+  pointer-events: auto;
+  z-index: 3;
 }
 
-.flower-gif {
-  position: absolute;
-  bottom: 0;
-  left: 0;
+.flower-scene spline-viewer {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  object-position: bottom left;
-  mix-blend-mode: screen;
-  opacity: 0.96;
+  display: block;
+}
+
+/* Fondu uniquement dans les derniers 12% — encadrement serré du texte */
+.flower-scene--left {
+  -webkit-mask-image: linear-gradient(to right, black 88%, transparent 100%);
+  mask-image: linear-gradient(to right, black 88%, transparent 100%);
+}
+
+.flower-scene--right {
+  -webkit-mask-image: linear-gradient(to left, black 88%, transparent 100%);
+  mask-image: linear-gradient(to left, black 88%, transparent 100%);
+}
+
+spline-viewer::part(logo) {
+  display: none !important;
 }
 
 /* ── BREATHE SECTION ── */
@@ -815,4 +837,117 @@ body.is-fullscreen .breathe-center { position: relative; z-index: 2; filter: non
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-8px); }
+}
+
+/* ── RESPONSIVE ── */
+
+@media (max-width: 1024px) {
+  nav { padding: 20px 32px; }
+
+  .hero-content { padding: 40px 24px; }
+
+  /* Scènes réduites sur tablette, texte toujours protégé */
+  .flower-scene { flex: 0 0 30%; }
+  .hero-content { flex: 1; padding: 40px 16px; }
+
+  #s-journey { padding-left: clamp(32px, 6vw, 80px); }
+
+  footer { padding: 28px 32px; }
+
+  #blob1 { width: 360px; height: 360px; }
+  #blob2 { width: 420px; height: 420px; }
+}
+
+@media (max-width: 768px) {
+  section { padding: 64px 24px; }
+
+  /* Nav */
+  nav { padding: 16px 24px; }
+  .nav-steps { gap: 16px; }
+  .nav-steps li { font-size: 0.6rem; letter-spacing: 0.12em; }
+
+  /* Hero : colonne, scènes masquées sur mobile */
+  #s-hero { justify-content: flex-start; }
+
+  .hero-layout {
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  .flower-scene--left {
+    width: 100%;
+    height: 44vw;
+    min-height: 220px;
+    align-self: auto;
+    -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+  }
+
+  /* Scène droite masquée sur mobile */
+  .flower-scene--right { display: none; }
+
+  .hero-content {
+    padding: 24px 24px 80px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-sub { margin: 0 auto 40px; max-width: 280px; }
+
+  .hero-title { font-size: clamp(3rem, 13vw, 5rem); }
+
+  /* Journey */
+  #s-journey {
+    padding-left: 24px;
+    padding-right: 24px;
+    align-items: center;
+    gap: 40px;
+  }
+  .journey-cards { max-width: 100%; }
+
+  /* Footer */
+  footer {
+    flex-direction: column;
+    gap: 20px;
+    padding: 28px 24px;
+    text-align: center;
+  }
+  .footer-right { gap: 20px; }
+
+  /* UI elements */
+  .progress-dots { display: none; }
+  .sound-btn { bottom: 20px; right: 20px; }
+  .fullscreen-btn { bottom: 68px; right: 20px; }
+
+  /* Blobs */
+  #blob1 { width: 240px; height: 240px; top: -60px; right: -60px; }
+  #blob2 { width: 280px; height: 280px; bottom: -80px; left: -60px; }
+}
+
+@media (max-width: 480px) {
+  nav { padding: 14px 20px; }
+  .nav-steps { gap: 12px; }
+  .nav-steps li { font-size: 0.55rem; }
+
+  .hero-content { padding: 20px 20px 64px; }
+  .hero-title { font-size: clamp(2.8rem, 15vw, 4rem); }
+
+  .flower-scene--left { height: 52vw; }
+
+  footer { padding: 24px 20px; }
+}
+
+/* Préférence de mouvement réduit */
+@media (prefers-reduced-motion: reduce) {
+  .hero-eyebrow,
+  .hero-title,
+  .hero-sub,
+  .cta-pill,
+  .scroll-hint {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .breathe-orb,
+  .scroll-line { animation: none; }
 }
