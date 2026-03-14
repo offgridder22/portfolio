@@ -24,7 +24,7 @@ breathe-app/
 │   └── Footer.tsx           # Pied de page
 ├── public/
 │   └── images/
-│       ├── plant.png        # Image décorative (section hero)
+│       ├── dawn.png        # Image décorative (section hero)
 │       └── dandelion.png    # Image de réserve
 ├── styles/
 │   └── globals.css          # Tous les styles CSS

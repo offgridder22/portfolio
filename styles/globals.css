@@ -133,27 +133,34 @@ nav {
 /* ── HERO ── */
 #s-hero {
   gap: 0;
-  overflow: hidden;
+  overflow: visible;
   padding: 0;
-  align-items: stretch;
-  justify-content: flex-start;
+  position: relative;
+  height: 100vh;
+  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
 }
 
-.hero-layout {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 100vh;
+.hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: -340px;
+  z-index: 1;
+  -webkit-mask-image: linear-gradient(to bottom, black 66%, black 50%, transparent 80%);
+  mask-image: linear-gradient(to bottom,  black 66%, black 50%, transparent 80%);
 }
 
 .hero-content {
-  flex: 1;
-  min-width: 0;
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 40px 8px;
+  padding: 0 24px;
 }
 
 .hero-eyebrow {
@@ -256,35 +263,6 @@ nav {
   color: var(--text-light);
 }
 
-/* ── SPLINE SCENES ── */
-.flower-scene {
-  flex: 0 0 37%;
-  align-self: stretch;
-  overflow: hidden;
-  pointer-events: auto;
-  z-index: 3;
-}
-
-.flower-scene spline-viewer {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-/* Fondu uniquement dans les derniers 12% — encadrement serré du texte */
-.flower-scene--left {
-  -webkit-mask-image: linear-gradient(to right, black 88%, transparent 100%);
-  mask-image: linear-gradient(to right, black 88%, transparent 100%);
-}
-
-.flower-scene--right {
-  -webkit-mask-image: linear-gradient(to left, black 88%, transparent 100%);
-  mask-image: linear-gradient(to left, black 88%, transparent 100%);
-}
-
-spline-viewer::part(logo) {
-  display: none !important;
-}
 
 /* ── BREATHE SECTION ── */
 #s-breathe {
@@ -846,9 +824,7 @@ body.is-fullscreen .breathe-center { position: relative; z-index: 2; filter: non
 
   .hero-content { padding: 40px 24px; }
 
-  /* Scènes réduites sur tablette, texte toujours protégé */
-  .flower-scene { flex: 0 0 30%; }
-  .hero-content { flex: 1; padding: 40px 16px; }
+  .hero-content { padding: 0 32px; }
 
   #s-journey { padding-left: clamp(32px, 6vw, 80px); }
 
@@ -866,31 +842,7 @@ body.is-fullscreen .breathe-center { position: relative; z-index: 2; filter: non
   .nav-steps { gap: 16px; }
   .nav-steps li { font-size: 0.6rem; letter-spacing: 0.12em; }
 
-  /* Hero : colonne, scènes masquées sur mobile */
-  #s-hero { justify-content: flex-start; }
-
-  .hero-layout {
-    flex-direction: column;
-    height: 100vh;
-  }
-
-  .flower-scene--left {
-    width: 100%;
-    height: 44vw;
-    min-height: 220px;
-    align-self: auto;
-    -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-  }
-
-  /* Scène droite masquée sur mobile */
-  .flower-scene--right { display: none; }
-
-  .hero-content {
-    padding: 24px 24px 80px;
-    align-items: center;
-    text-align: center;
-  }
+  .hero-content { padding: 0 20px; }
 
   .hero-sub { margin: 0 auto 40px; max-width: 280px; }
 
@@ -929,10 +881,8 @@ body.is-fullscreen .breathe-center { position: relative; z-index: 2; filter: non
   .nav-steps { gap: 12px; }
   .nav-steps li { font-size: 0.55rem; }
 
-  .hero-content { padding: 20px 20px 64px; }
+  .hero-content { padding: 0 16px; }
   .hero-title { font-size: clamp(2.8rem, 15vw, 4rem); }
-
-  .flower-scene--left { height: 52vw; }
 
   footer { padding: 24px 20px; }
 }
