@@ -5,8 +5,8 @@ import WindyLandscape from './WindyLandscape';
 const sceneImages = {
   dawn:   { src: '/images/dawn.png',    aspectRatio: 0,    mobileAspectRatio: 1.0 },
   forest: { src: '/images/forest.png',  aspectRatio: 0,    mobileAspectRatio: 1.0 },
-  ocean:  { src: '/images/ocean.png',   aspectRatio: -2.25, mobileAspectRatio: 1.0 },
-  dusk:   { src: '/images/desert.png',  aspectRatio: 0, mobileAspectRatio: 1.0 },
+  ocean:  { src: '/images/ocean.png',   aspectRatio: -2.5, mobileAspectRatio: 1.0 },
+  dusk:   { src: '/images/desert.png',  aspectRatio: -2.25, mobileAspectRatio: 0 },
 };
 
 export default function HeroSection({ scene = 'dawn', onBegin }) {

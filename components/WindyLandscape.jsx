@@ -137,8 +137,9 @@ export default function WindyLandscape({ src, style, className, aspectRatio = 0,
       const { width } = parent.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 1);
       let aspect;
+      const dynamicAspect = 1.0 + Math.pow(Math.max(0, (width - 400) / 1600), 0.47) * 0.8;
       if (width < 1025) {
-        aspect = mobileAspectRatio;
+        aspect = mobileAspectRatio === 0 ? dynamicAspect : mobileAspectRatio;
       } else if (aspectRatio < 0) {
         aspect = Math.abs(aspectRatio);
       } else {
