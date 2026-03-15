@@ -68,7 +68,16 @@ export default function WaveCanvas({ scene }) {
     }
 
     initWaves();
-    draw();
+
+    let lastFrame = 0;
+    const FRAME_INTERVAL = 1000 / 30; // 30fps
+    function loop(ts) {
+      rafRef.current = requestAnimationFrame(loop);
+      if (ts - lastFrame < FRAME_INTERVAL) return;
+      lastFrame = ts;
+      draw();
+    }
+    rafRef.current = requestAnimationFrame(loop);
 
     const handleResize = () => initWaves();
     window.addEventListener('resize', handleResize);

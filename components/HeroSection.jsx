@@ -2,11 +2,19 @@
 
 import WindyLandscape from './WindyLandscape';
 
-export default function HeroSection({ onBegin }) {
+const sceneImages = {
+  dawn:   { src: '/images/dawn.png',    aspectRatio: 0,    mobileAspectRatio: 1.0 },
+  forest: { src: '/images/forest.png',  aspectRatio: 0,    mobileAspectRatio: 1.0 },
+  ocean:  { src: '/images/ocean.png',   aspectRatio: -2.25, mobileAspectRatio: 1.0 },
+  dusk:   { src: '/images/desert.png',  aspectRatio: 0, mobileAspectRatio: 1.0 },
+};
+
+export default function HeroSection({ scene = 'dawn', onBegin }) {
+  const { src, aspectRatio, mobileAspectRatio } = sceneImages[scene];
   return (
     <section id="s-hero">
-      <div className="hero-bg" aria-hidden="true">
-        <WindyLandscape src="/images/dawn.png" />
+      <div className={`hero-bg ${scene === 'ocean' ? 'hero-bg--ocean' : ''}`} aria-hidden="true">
+        <WindyLandscape src={src} aspectRatio={aspectRatio} mobileAspectRatio={mobileAspectRatio} />
       </div>
 
       <div className="hero-content">

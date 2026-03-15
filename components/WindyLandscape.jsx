@@ -54,7 +54,7 @@ function compileShader(gl, type, src) {
  * Renders an image via WebGL with a subtle grass-wind displacement effect.
  * Replicates `objectFit: contain; objectPosition: center bottom` exactly.
  */
-export default function WindyLandscape({ src, style, className }) {
+export default function WindyLandscape({ src, style, className, aspectRatio = 0, mobileAspectRatio = 1.0 }) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -134,9 +134,18 @@ export default function WindyLandscape({ src, style, className }) {
     function resize() {
       const parent = canvas.parentElement;
       if (!parent) return;
-      const { width, height } = parent.getBoundingClientRect();
-      canvas.width  = Math.round(width  * (window.devicePixelRatio || 1));
-      canvas.height = Math.round(height * (window.devicePixelRatio || 1));
+      const { width } = parent.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 1);
+      let aspect;
+      if (width < 1025) {
+        aspect = mobileAspectRatio;
+      } else if (aspectRatio < 0) {
+        aspect = Math.abs(aspectRatio);
+      } else {
+        aspect = 1.0 + Math.pow(Math.max(0, (width - 400) / 1600), 0.47) * 0.8 - aspectRatio;
+      }
+      canvas.width  = Math.round(width * dpr);
+      canvas.height = Math.round(width * dpr / aspect);
       gl.viewport(0, 0, canvas.width, canvas.height);
       buildQuad();
     }
@@ -167,7 +176,14 @@ export default function WindyLandscape({ src, style, className }) {
 
       resize();
 
+      let lastFrame = 0;
+      const FRAME_INTERVAL = 1000 / 30; // 30fps
+
       function render(ts) {
+        animId = requestAnimationFrame(render);
+        if (ts - lastFrame < FRAME_INTERVAL) return;
+        lastFrame = ts;
+
         if (!startTime) startTime = ts;
         const t = (ts - startTime) / 1000.0;
 
@@ -184,8 +200,6 @@ export default function WindyLandscape({ src, style, className }) {
 
         gl.uniform1f(uTime, t);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-
-        animId = requestAnimationFrame(render);
       }
 
       animId = requestAnimationFrame(render);
@@ -201,7 +215,7 @@ export default function WindyLandscape({ src, style, className }) {
       if (texture) gl.deleteTexture(texture);
       gl.deleteProgram(prog);
     };
-  }, [src]);
+  }, [src, aspectRatio, mobileAspectRatio]);
 
   return (
     <canvas

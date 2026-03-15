@@ -63,9 +63,7 @@ export default function Home() {
       });
       setActiveSection(active);
 
-      const targetScene = (userChosenScene && (active === 1 || active === 2))
-        ? userChosenScene
-        : sectionScenes[active];
+      const targetScene = userChosenScene || sectionScenes[active];
       changeScene(targetScene, soundOn);
 
       // Parallax
@@ -166,7 +164,7 @@ export default function Home() {
 
       {/* Main content */}
       <main>
-        <HeroSection onBegin={() => scrollToSection(1)} />
+        <HeroSection scene={currentScene} onBegin={() => scrollToSection(1)} />
         <BreatheSection
           scene={currentScene}
           onToggleFullscreen={toggleFullscreen}

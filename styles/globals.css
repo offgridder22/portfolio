@@ -133,13 +133,15 @@ nav {
 /* ── HERO ── */
 #s-hero {
   gap: 0;
-  overflow: visible;
+  overflow: hidden;
   padding: 0;
   position: relative;
   height: 100vh;
   min-height: 100vh;
   justify-content: center;
   align-items: center;
+  -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
 }
 
 .hero-bg {
@@ -147,10 +149,21 @@ nav {
   top: 0;
   left: 0;
   right: 0;
-  bottom: -340px;
+  height: max(130%, 62.5vw);
   z-index: 1;
-  -webkit-mask-image: linear-gradient(to bottom, black 66%, black 50%, transparent 80%);
-  mask-image: linear-gradient(to bottom,  black 66%, black 50%, transparent 80%);
+  -webkit-mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+}
+
+@media (max-width: 1024px) {
+  .hero-bg {
+    top: auto;
+    bottom: 0;
+    height: 45%;
+  }
+  .hero-bg--ocean {
+    height: 55%;
+  }
 }
 
 .hero-content {
@@ -161,6 +174,7 @@ nav {
   align-items: center;
   text-align: center;
   padding: 0 24px;
+  margin-bottom: 10vh;
 }
 
 .hero-eyebrow {
@@ -821,6 +835,7 @@ body.is-fullscreen .breathe-center { position: relative; z-index: 2; filter: non
 
 @media (max-width: 1024px) {
   nav { padding: 20px 32px; }
+
 
   .hero-content { padding: 40px 24px; }
 
